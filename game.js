@@ -8,8 +8,9 @@ const HIGHSCORE_KEY = 'arkanoid-highscore';
 
 class Game {
   constructor() {
+    this.menu = new Menu();
+    this.state = 'menu';
     this.highScore = Number( localStorage.getItem( HIGHSCORE_KEY ) ) || 0;
-    this.initState();
     canvas.addEventListener( 'click', ( e ) => this.onClick( e ) );
   }
 
@@ -20,7 +21,7 @@ class Game {
     }
   }
 
-  initState() {
+  startGame() {
     this.state = 'playing';
     this.paddle = new Paddle();
     this.ball = new Ball();
@@ -39,10 +40,17 @@ class Game {
     const rect = canvas.getBoundingClientRect();
     const mx = e.clientX - rect.left;
     const my = e.clientY - rect.top;
+
+    if ( this.state === 'menu' ) {
+      const action = this.menu.onClick( mx, my );
+      if ( action === 'play' ) this.startGame();
+      return;
+    }
+
     const btn = this.retryButtonBounds();
 
     if ( mx >= btn.x && mx <= btn.x + btn.w && my >= btn.y && my <= btn.y + btn.h ) {
-      this.initState();
+      this.startGame();
     }
   }
 
@@ -80,6 +88,11 @@ class Game {
   }
 
   render() {
+    if ( this.state === 'menu' ) {
+      this.menu.render();
+      return;
+    }
+
     ctx.fillStyle = '#000';
     ctx.fillRect( 0, 0, canvas.width, canvas.height );
     this.paddle.render();
