@@ -4,25 +4,27 @@ const ctx = canvas.getContext( '2d' );
 const bounceSound = new Audio( 'assets/sounds/ball-bounce.mp3' );
 const breakSound = new Audio( 'assets/sounds/break-sound.mp3' );
 
-const HIGHSCORE_KEY = 'arkanoid-highscore';
-
 class Game {
   constructor() {
     this.menu = new Menu();
     this.state = 'menu';
-    this.highScore = Number( localStorage.getItem( HIGHSCORE_KEY ) ) || 0;
     canvas.addEventListener( 'click', ( e ) => this.onClick( e ) );
+  }
+
+  highScoreKey() {
+    return `arkanoid-highscore-${ this.difficulty }`;
   }
 
   updateHighScore() {
     if ( this.score > this.highScore ) {
       this.highScore = this.score;
-      localStorage.setItem( HIGHSCORE_KEY, String( this.highScore ) );
+      localStorage.setItem( this.highScoreKey(), String( this.highScore ) );
     }
   }
 
   startGame() {
     this.difficulty = this.menu.selectedDifficulty;
+    this.highScore = Number( localStorage.getItem( this.highScoreKey() ) ) || 0;
     this.state = 'playing';
     this.paddle = new Paddle();
     this.ball = new Ball( DIFFICULTY_SPEEDS[ this.difficulty ] );
