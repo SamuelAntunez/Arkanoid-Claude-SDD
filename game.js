@@ -58,6 +58,18 @@ class Game {
       return;
     }
 
+    if ( this.state === 'paused' ) {
+      const resume = this.pauseResumeButtonBounds();
+      const menuBtn = this.pauseMenuButtonBounds();
+
+      if ( mx >= resume.x && mx <= resume.x + resume.w && my >= resume.y && my <= resume.y + resume.h ) {
+        this.state = 'playing';
+      } else if ( mx >= menuBtn.x && mx <= menuBtn.x + menuBtn.w && my >= menuBtn.y && my <= menuBtn.y + menuBtn.h ) {
+        this.state = 'menu';
+      }
+      return;
+    }
+
     const btn = this.retryButtonBounds();
 
     if ( mx >= btn.x && mx <= btn.x + btn.w && my >= btn.y && my <= btn.y + btn.h ) {
