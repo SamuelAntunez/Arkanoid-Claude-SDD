@@ -12,11 +12,38 @@ class Block {
     this.color = color;
     this.broken = false;
     this.explosionFrame = null;
+    this.explosionStart = null;
+  }
+
+  hit() {
+    if ( this.broken ) return;
+    this.broken = true;
+    this.explosionFrame = 0;
+    this.explosionStart = performance.now();
+    breakSound.currentTime = 0;
+    breakSound.play();
+  }
+
+  update() {
+    if ( !this.broken || this.explosionFrame === null ) return;
+
+    const elapsed = performance.now() - this.explosionStart;
+    const frame = Math.floor( elapsed / EXPLOSION_DURATION );
+    const frames = EXPLOSION_FRAMES[ this.color ];
+
+    this.explosionFrame = frame < frames.length ? frame : null;
   }
 
   render() {
-    if ( this.broken ) return;
-    drawSprite( ctx, 'block_' + this.color, this.x, this.y, this.width, this.height );
+    if ( !this.broken ) {
+      drawSprite( ctx, 'block_' + this.color, this.x, this.y, this.width, this.height );
+      return;
+    }
+
+    if ( this.explosionFrame === null ) return;
+
+    const frame = EXPLOSION_FRAMES[ this.color ][ this.explosionFrame ];
+    drawFrame( ctx, frame, this.x, this.y, this.width, this.height );
   }
 }
 
@@ -62,6 +89,8 @@ function handleBlockCollisions( ball, blocks ) {
 
     bounceSound.currentTime = 0;
     bounceSound.play();
+
+    block.hit();
 
     return block;
   }

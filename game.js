@@ -10,12 +10,16 @@ class Game {
     this.paddle = new Paddle();
     this.ball = new Ball();
     this.blocks = createLevel();
+    this.score = 0;
   }
 
   update() {
     this.paddle.update();
     this.ball.update( this.paddle );
-    handleBlockCollisions( this.ball, this.blocks );
+    this.blocks.forEach( ( block ) => block.update() );
+
+    const hitBlock = handleBlockCollisions( this.ball, this.blocks );
+    if ( hitBlock ) this.score += 10;
   }
 
   render() {
@@ -24,6 +28,14 @@ class Game {
     this.paddle.render();
     this.ball.render();
     this.blocks.forEach( ( block ) => block.render() );
+    this.renderHud();
+  }
+
+  renderHud() {
+    ctx.fillStyle = '#fff';
+    ctx.font = '18px sans-serif';
+    ctx.textBaseline = 'top';
+    ctx.fillText( `Score: ${ this.score }`, 10, 10 );
   }
 
   loop() {
