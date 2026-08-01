@@ -38,6 +38,7 @@ class Game {
     this.ball = new Ball( DIFFICULTY_SPEEDS[ this.difficulty ] );
     this.blocks = createLevel();
     this.powerups = [];
+    this.activeEffects = { size: null, speed: null };
     this.score = 0;
     this.lives = 3;
   }
@@ -94,6 +95,24 @@ class Game {
     return dx * dx + dy * dy <= powerup.radius * powerup.radius;
   }
 
+  applyPowerup( type ) {
+    const expiresAt = performance.now() + POWERUP_DURATION * 1000;
+
+    if ( type === 'paddle-big' || type === 'paddle-small' ) {
+      this.activeEffects.size = { type, expiresAt };
+      this.paddle.setWidthScale( POWERUP_CONFIG[ type ].paddleScale );
+    }
+  }
+
+  updateActiveEffects() {
+    const now = performance.now();
+
+    if ( this.activeEffects.size && now > this.activeEffects.size.expiresAt ) {
+      this.paddle.setWidthScale( 1 );
+      this.activeEffects.size = null;
+    }
+  }
+
   loseLife() {
     this.lives -= 1;
 
@@ -124,9 +143,14 @@ class Game {
     this.powerups.forEach( ( powerup ) => powerup.update() );
 
     this.powerups = this.powerups.filter( ( powerup ) => {
-      if ( this.paddleTouchesPowerup( powerup ) ) return false;
+      if ( this.paddleTouchesPowerup( powerup ) ) {
+        this.applyPowerup( powerup.type );
+        return false;
+      }
       return powerup.y - powerup.radius <= canvas.height;
     } );
+
+    this.updateActiveEffects();
 
     if ( this.ball.y - this.ball.radius > canvas.height ) {
       this.loseLife();

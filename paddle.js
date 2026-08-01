@@ -1,6 +1,8 @@
 class Paddle {
   constructor() {
-    this.width = SPRITES.paddle.sw;
+    this.baseWidth = SPRITES.paddle.sw;
+    this.widthScale = 1;
+    this.width = this.baseWidth;
     this.height = SPRITES.paddle.sh;
     this.x = ( canvas.width - this.width ) / 2;
     this.y = canvas.height - this.height - 20;
@@ -33,6 +35,14 @@ class Paddle {
 
   resetPosition() {
     this.x = ( canvas.width - this.width ) / 2;
+  }
+
+  setWidthScale( scale ) {
+    const centerX = this.x + this.width / 2;
+    this.widthScale = scale;
+    this.width = this.baseWidth * scale;
+    this.x = centerX - this.width / 2;
+    this.clamp();
   }
 
   clamp() {
