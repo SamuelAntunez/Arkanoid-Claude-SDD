@@ -85,6 +85,15 @@ class Game {
     }
   }
 
+  paddleTouchesPowerup( powerup ) {
+    const closestX = Math.max( this.paddle.x, Math.min( powerup.x, this.paddle.x + this.paddle.width ) );
+    const closestY = Math.max( this.paddle.y, Math.min( powerup.y, this.paddle.y + this.paddle.height ) );
+    const dx = powerup.x - closestX;
+    const dy = powerup.y - closestY;
+
+    return dx * dx + dy * dy <= powerup.radius * powerup.radius;
+  }
+
   loseLife() {
     this.lives -= 1;
 
@@ -113,7 +122,11 @@ class Game {
     }
 
     this.powerups.forEach( ( powerup ) => powerup.update() );
-    this.powerups = this.powerups.filter( ( powerup ) => powerup.y - powerup.radius <= canvas.height );
+
+    this.powerups = this.powerups.filter( ( powerup ) => {
+      if ( this.paddleTouchesPowerup( powerup ) ) return false;
+      return powerup.y - powerup.radius <= canvas.height;
+    } );
 
     if ( this.ball.y - this.ball.radius > canvas.height ) {
       this.loseLife();
