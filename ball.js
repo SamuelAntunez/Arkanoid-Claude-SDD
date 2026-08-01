@@ -1,8 +1,17 @@
 class Ball {
   constructor( speed = 6 ) {
     this.radius = SPRITES.ball.sw / 2;
+    this.baseSpeed = speed;
     this.speed = speed;
     this.reset();
+  }
+
+  setSpeed( newSpeed ) {
+    const currentSpeed = Math.hypot( this.dx, this.dy );
+    const scale = currentSpeed === 0 ? 1 : newSpeed / currentSpeed;
+    this.dx *= scale;
+    this.dy *= scale;
+    this.speed = newSpeed;
   }
 
   reset() {

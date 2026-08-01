@@ -101,6 +101,9 @@ class Game {
     if ( type === 'paddle-big' || type === 'paddle-small' ) {
       this.activeEffects.size = { type, expiresAt };
       this.paddle.setWidthScale( POWERUP_CONFIG[ type ].paddleScale );
+    } else if ( type === 'ball-slow' || type === 'ball-fast' ) {
+      this.activeEffects.speed = { type, expiresAt };
+      this.ball.setSpeed( this.ball.baseSpeed * POWERUP_CONFIG[ type ].speedScale );
     }
   }
 
@@ -110,6 +113,11 @@ class Game {
     if ( this.activeEffects.size && now > this.activeEffects.size.expiresAt ) {
       this.paddle.setWidthScale( 1 );
       this.activeEffects.size = null;
+    }
+
+    if ( this.activeEffects.speed && now > this.activeEffects.speed.expiresAt ) {
+      this.ball.setSpeed( this.ball.baseSpeed );
+      this.activeEffects.speed = null;
     }
   }
 
