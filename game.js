@@ -54,12 +54,23 @@ class Game {
     return { x: canvas.width / 2 + 20, y: 380, w: 200, h: 50 };
   }
 
-  onClick( e ) {
-    if ( this.state === 'playing' ) return;
+  menuButtonBounds() {
+    return { x: canvas.width - 10 - 44, y: 10, w: 44, h: 44 };
+  }
 
+  onClick( e ) {
     const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
+    const scale = canvas.width / rect.width;
+    const mx = ( e.clientX - rect.left ) * scale;
+    const my = ( e.clientY - rect.top ) * scale;
+
+    if ( this.state === 'playing' ) {
+      const menuBtn = this.menuButtonBounds();
+      if ( mx >= menuBtn.x && mx <= menuBtn.x + menuBtn.w && my >= menuBtn.y && my <= menuBtn.y + menuBtn.h ) {
+        this.state = 'paused';
+      }
+      return;
+    }
 
     if ( this.state === 'menu' ) {
       const action = this.menu.onClick( mx, my );
@@ -263,7 +274,8 @@ class Game {
     const ballSize = 16;
     const gap = 6;
     const totalWidth = this.lives * ballSize + Math.max( 0, this.lives - 1 ) * gap;
-    let livesX = canvas.width - 10 - totalWidth;
+    const menuBtn = this.menuButtonBounds();
+    let livesX = menuBtn.x - 10 - totalWidth;
 
     for ( let i = 0; i < this.lives; i++ ) {
       drawSprite( ctx, 'ball', livesX, 10, ballSize, ballSize );
@@ -271,6 +283,20 @@ class Game {
     }
 
     this.renderActiveEffects();
+    this.renderMenuButton();
+  }
+
+  renderMenuButton() {
+    const btn = this.menuButtonBounds();
+    ctx.fillStyle = '#555';
+    ctx.fillRect( btn.x, btn.y, btn.w, btn.h );
+    ctx.fillStyle = '#fff';
+    ctx.font = '20px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText( '⏸', btn.x + btn.w / 2, btn.y + btn.h / 2 );
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
   }
 
   renderActiveEffects() {
@@ -334,7 +360,9 @@ class Game {
   }
 }
 
+let game;
+
 loadSpritesheet( () => {
-  const game = new Game();
+  game = new Game();
   game.loop();
 } );

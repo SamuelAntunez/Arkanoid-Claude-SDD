@@ -14,6 +14,8 @@ class Paddle {
     window.addEventListener( 'keydown', ( e ) => this.onKeyDown( e ) );
     window.addEventListener( 'keyup', ( e ) => this.onKeyUp( e ) );
     canvas.addEventListener( 'mousemove', ( e ) => this.onMouseMove( e ) );
+    canvas.addEventListener( 'touchstart', ( e ) => this.onTouchMove( e ), { passive: false } );
+    canvas.addEventListener( 'touchmove', ( e ) => this.onTouchMove( e ), { passive: false } );
   }
 
   onKeyDown( e ) {
@@ -28,8 +30,20 @@ class Paddle {
 
   onMouseMove( e ) {
     const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
+    const scale = canvas.width / rect.width;
+    const mouseX = ( e.clientX - rect.left ) * scale;
     this.x = mouseX - this.width / 2;
+    this.clamp();
+  }
+
+  onTouchMove( e ) {
+    if ( game.state !== 'playing' ) return;
+
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const scale = canvas.width / rect.width;
+    const touchX = ( e.touches[ 0 ].clientX - rect.left ) * scale;
+    this.x = touchX - this.width / 2;
     this.clamp();
   }
 
