@@ -95,20 +95,20 @@ class Game {
 
 ## Criterios de aceptación
 
-- [ ] Al romper un bloque, aproximadamente 1 de cada ~6-7 bloques (15%) suelta un power-up visible (círculo de color con letra).
-- [ ] El power-up cae en línea recta hacia abajo desde la posición del bloque roto.
-- [ ] Si el power-up llega al borde inferior del canvas sin ser tocado por el paddle, desaparece sin efecto.
-- [ ] Si el paddle toca el power-up, este desaparece y se activa su efecto.
-- [ ] "Paddle grande" ensancha el paddle 1.5x durante 10 segundos; al expirar vuelve al ancho normal.
-- [ ] "Paddle chico" achica el paddle a 0.6x durante 10 segundos; al expirar vuelve al ancho normal.
-- [ ] Recoger "paddle chico" estando "paddle grande" activo reemplaza el efecto (ancho y timer del nuevo tipo).
-- [ ] "Bola lenta" reduce la velocidad de la bola a 0.6x durante 10 segundos; al expirar vuelve a la velocidad base de la dificultad.
-- [ ] "Bola rápida" aumenta la velocidad de la bola a 1.5x durante 10 segundos; al expirar vuelve a la velocidad base de la dificultad.
-- [ ] Recoger el mismo tipo de power-up mientras está activo reinicia su duración a 10 segundos completos.
-- [ ] "Multi-bola" agrega una segunda bola clonada en la misma posición con ángulo espejado; ambas bolas rebotan e interactúan con bloques normalmente.
-- [ ] Con 2+ bolas en juego, perder una de ellas (cae debajo del paddle) no resta vida mientras quede al menos una bola activa.
-- [ ] Se pierde una vida únicamente cuando la última bola en juego cae debajo del paddle.
-- [ ] El HUD muestra los power-ups activos (letra/color) junto con los segundos restantes de cada efecto.
+- [x] Al romper un bloque, aproximadamente 1 de cada ~6-7 bloques (15%) suelta un power-up visible (círculo de color con letra).
+- [x] El power-up cae en línea recta hacia abajo desde la posición del bloque roto.
+- [x] Si el power-up llega al borde inferior del canvas sin ser tocado por el paddle, desaparece sin efecto.
+- [x] Si el paddle toca el power-up, este desaparece y se activa su efecto.
+- [x] "Paddle grande" ensancha el paddle 1.5x durante 10 segundos; al expirar vuelve al ancho normal.
+- [x] "Paddle chico" achica el paddle a 0.6x durante 10 segundos; al expirar vuelve al ancho normal.
+- [x] Recoger "paddle chico" estando "paddle grande" activo reemplaza el efecto (ancho y timer del nuevo tipo).
+- [x] "Bola lenta" reduce la velocidad de la bola a 0.6x durante 10 segundos; al expirar vuelve a la velocidad base de la dificultad.
+- [x] "Bola rápida" aumenta la velocidad de la bola a 1.5x durante 10 segundos; al expirar vuelve a la velocidad base de la dificultad.
+- [x] Recoger el mismo tipo de power-up mientras está activo reinicia su duración a 10 segundos completos.
+- [x] "Multi-bola" agrega una segunda bola clonada en la misma posición con ángulo espejado; ambas bolas rebotan e interactúan con bloques normalmente.
+- [x] Con 2+ bolas en juego, perder una de ellas (cae debajo del paddle) no resta vida mientras quede al menos una bola activa.
+- [x] Se pierde una vida únicamente cuando la última bola en juego cae debajo del paddle.
+- [x] El HUD muestra los power-ups activos (letra/color) junto con los segundos restantes de cada efecto.
 
 ---
 
