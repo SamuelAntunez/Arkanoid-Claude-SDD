@@ -263,6 +263,33 @@ class Game {
       drawSprite( ctx, 'ball', livesX, 10, ballSize, ballSize );
       livesX += ballSize + gap;
     }
+
+    this.renderActiveEffects();
+  }
+
+  renderActiveEffects() {
+    const now = performance.now();
+    const active = [ this.activeEffects.size, this.activeEffects.speed ].filter( Boolean );
+
+    ctx.font = '14px sans-serif';
+    ctx.textAlign = 'left';
+
+    active.forEach( ( effect, i ) => {
+      const config = POWERUP_CONFIG[ effect.type ];
+      const secondsLeft = Math.ceil( ( effect.expiresAt - now ) / 1000 );
+      const y = 34 + i * 20;
+
+      ctx.fillStyle = config.color;
+      ctx.beginPath();
+      ctx.arc( 18, y + 7, 8, 0, Math.PI * 2 );
+      ctx.fill();
+
+      ctx.fillStyle = '#fff';
+      ctx.textBaseline = 'middle';
+      ctx.fillText( config.label, 15, y + 7 );
+      ctx.textBaseline = 'top';
+      ctx.fillText( `${ secondsLeft }s`, 32, y );
+    } );
   }
 
   renderEndScreen( title ) {
