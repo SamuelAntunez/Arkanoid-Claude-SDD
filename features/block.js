@@ -1,8 +1,3 @@
-const BLOCK_ROWS = [ 'red', 'yellow', 'cyan', 'magenta', 'hotpink', 'green', 'gray' ];
-const BLOCK_COLS = 22;
-const BLOCK_GAP = 2;
-const BLOCK_MARGIN_TOP = 50;
-
 class Block {
   constructor( x, y, color ) {
     this.x = x;
@@ -45,24 +40,6 @@ class Block {
     const frame = EXPLOSION_FRAMES[ this.color ][ this.explosionFrame ];
     drawFrame( ctx, frame, this.x, this.y, this.width, this.height );
   }
-}
-
-function createLevel() {
-  const blocks = [];
-  const blockWidth = SPRITES.blocks.red.sw;
-  const blockHeight = SPRITES.blocks.red.sh;
-  const totalWidth = BLOCK_COLS * ( blockWidth + BLOCK_GAP ) - BLOCK_GAP;
-  const marginX = ( canvas.width - totalWidth ) / 2;
-
-  BLOCK_ROWS.forEach( ( color, row ) => {
-    for ( let col = 0; col < BLOCK_COLS; col++ ) {
-      const x = marginX + col * ( blockWidth + BLOCK_GAP );
-      const y = BLOCK_MARGIN_TOP + row * ( blockHeight + BLOCK_GAP );
-      blocks.push( new Block( x, y, color ) );
-    }
-  } );
-
-  return blocks;
 }
 
 function handleBlockCollisions( ball, blocks ) {

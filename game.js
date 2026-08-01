@@ -37,7 +37,8 @@ class Game {
     this.paddle = new Paddle();
     this.ballBaseSpeed = DIFFICULTY_SPEEDS[ this.difficulty ];
     this.balls = [ new Ball( this.ballBaseSpeed ) ];
-    this.blocks = createLevel();
+    this.level = 0;
+    this.blocks = createLevel( this.level );
     this.powerups = [];
     this.activeEffects = { size: null, speed: null };
     this.gameTime = 0;
