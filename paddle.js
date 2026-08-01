@@ -37,6 +37,8 @@ class Paddle {
   }
 
   onTouchMove( e ) {
+    if ( game.state !== 'playing' ) return;
+
     e.preventDefault();
     const rect = canvas.getBoundingClientRect();
     const scale = canvas.width / rect.width;

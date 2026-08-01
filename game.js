@@ -360,7 +360,9 @@ class Game {
   }
 }
 
+let game;
+
 loadSpritesheet( () => {
-  const game = new Game();
+  game = new Game();
   game.loop();
 } );
