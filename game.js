@@ -22,9 +22,10 @@ class Game {
   }
 
   startGame() {
+    this.difficulty = this.menu.selectedDifficulty;
     this.state = 'playing';
     this.paddle = new Paddle();
-    this.ball = new Ball();
+    this.ball = new Ball( DIFFICULTY_SPEEDS[ this.difficulty ] );
     this.blocks = createLevel();
     this.score = 0;
     this.lives = 3;
