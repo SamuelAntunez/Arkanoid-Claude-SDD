@@ -35,7 +35,8 @@ class Game {
     this.highScore = Number( localStorage.getItem( this.highScoreKey() ) ) || 0;
     this.state = 'playing';
     this.paddle = new Paddle();
-    this.ball = new Ball( DIFFICULTY_SPEEDS[ this.difficulty ] );
+    this.ballBaseSpeed = DIFFICULTY_SPEEDS[ this.difficulty ];
+    this.balls = [ new Ball( this.ballBaseSpeed ) ];
     this.blocks = createLevel();
     this.powerups = [];
     this.activeEffects = { size: null, speed: null };
@@ -103,7 +104,16 @@ class Game {
       this.paddle.setWidthScale( POWERUP_CONFIG[ type ].paddleScale );
     } else if ( type === 'ball-slow' || type === 'ball-fast' ) {
       this.activeEffects.speed = { type, expiresAt };
-      this.ball.setSpeed( this.ball.baseSpeed * POWERUP_CONFIG[ type ].speedScale );
+      this.balls.forEach( ( ball ) => ball.setSpeed( this.ballBaseSpeed * POWERUP_CONFIG[ type ].speedScale ) );
+    } else if ( type === 'multi-ball' ) {
+      const source = this.balls[ 0 ];
+      const clone = new Ball( source.baseSpeed );
+      clone.x = source.x;
+      clone.y = source.y;
+      clone.dx = -source.dx;
+      clone.dy = source.dy;
+      clone.speed = source.speed;
+      this.balls.push( clone );
     }
   }
 
@@ -116,9 +126,19 @@ class Game {
     }
 
     if ( this.activeEffects.speed && now > this.activeEffects.speed.expiresAt ) {
-      this.ball.setSpeed( this.ball.baseSpeed );
+      this.balls.forEach( ( ball ) => ball.setSpeed( this.ballBaseSpeed ) );
       this.activeEffects.speed = null;
     }
+  }
+
+  respawnBall() {
+    const ball = new Ball( this.ballBaseSpeed );
+
+    if ( this.activeEffects.speed ) {
+      ball.setSpeed( this.ballBaseSpeed * POWERUP_CONFIG[ this.activeEffects.speed.type ].speedScale );
+    }
+
+    this.balls = [ ball ];
   }
 
   loseLife() {
@@ -130,7 +150,7 @@ class Game {
       return;
     }
 
-    this.ball.reset();
+    this.respawnBall();
     this.paddle.resetPosition();
   }
 
@@ -138,15 +158,17 @@ class Game {
     if ( this.state !== 'playing' ) return;
 
     this.paddle.update();
-    this.ball.update( this.paddle );
+    this.balls.forEach( ( ball ) => ball.update( this.paddle ) );
     this.blocks.forEach( ( block ) => block.update() );
 
-    const hitBlock = handleBlockCollisions( this.ball, this.blocks );
-    if ( hitBlock ) {
-      this.score += 10;
-      const powerup = maybeSpawnPowerup( hitBlock );
-      if ( powerup ) this.powerups.push( powerup );
-    }
+    this.balls.forEach( ( ball ) => {
+      const hitBlock = handleBlockCollisions( ball, this.blocks );
+      if ( hitBlock ) {
+        this.score += 10;
+        const powerup = maybeSpawnPowerup( hitBlock );
+        if ( powerup ) this.powerups.push( powerup );
+      }
+    } );
 
     this.powerups.forEach( ( powerup ) => powerup.update() );
 
@@ -160,7 +182,8 @@ class Game {
 
     this.updateActiveEffects();
 
-    if ( this.ball.y - this.ball.radius > canvas.height ) {
+    this.balls = this.balls.filter( ( ball ) => ball.y - ball.radius <= canvas.height );
+    if ( this.balls.length === 0 ) {
       this.loseLife();
     }
 
@@ -179,7 +202,7 @@ class Game {
     ctx.fillStyle = '#000';
     ctx.fillRect( 0, 0, canvas.width, canvas.height );
     this.paddle.render();
-    this.ball.render();
+    this.balls.forEach( ( ball ) => ball.render() );
     this.blocks.forEach( ( block ) => block.render() );
     this.powerups.forEach( ( powerup ) => powerup.render() );
     this.renderHud();
