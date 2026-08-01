@@ -72,11 +72,13 @@ class Game {
   balls[]            // reemplaza `ball` único; arranca con 1, multi-bola agrega otra
   powerups[]         // power-ups cayendo actualmente en pantalla
   activeEffects      // { size: { type, expiresAt } | null, speed: { type, expiresAt } | null }
+  gameTime           // ms acumulados en estado 'playing'; no avanza en pausa ni al terminar la partida
+  lastFrameAt        // performance.now() del frame anterior, para calcular el delta de gameTime
   lives, score, difficulty, highScore, state
 }
 ```
 
-`expiresAt` guardado como `performance.now() + POWERUP_DURATION * 1000`, mismo patrón que ya usa `Block.explosionStart`.
+`expiresAt` guardado como `gameTime + POWERUP_DURATION * 1000`. `gameTime` es un reloj de juego (no de pared): solo se incrementa mientras `state === 'playing'`, así que un efecto se congela durante la pausa y al llegar a Game Over/Victoria, en vez de vencer o mostrar segundos negativos.
 
 ---
 
@@ -120,6 +122,7 @@ class Game {
 - **Vida se pierde solo cuando cae la última bola.** Razón: decisión explícita del usuario, hace que multi-bola sea un power-up de ventaja real y no solo cosmético.
 - **`Game.ball` (singular) se refactoriza a `Game.balls[]`.** Razón: necesario para soportar multi-bola sin mantener dos rutas de código (una bola vs varias); el resto de la lógica (colisión con bloques, paddle, paredes) se aplica igual a cada bola del array.
 - **HUD muestra segundos restantes por efecto activo.** Razón: decisión explícita del usuario, mejora feedback al jugador sobre cuándo termina cada efecto.
+- **`gameTime` (reloj de juego) en vez de `performance.now()` (reloj de pared)** para calcular `expiresAt`. Razón: corrige que los timers siguieran corriendo en pausa (efecto vencía apenas se reanudaba) y que el HUD mostrara segundos negativos después de Game Over/Victoria, ya que `update()` (donde vencían los efectos) para en esos estados pero `render()` (donde se muestra el contador) sigue dibujando. Al pausar o terminar la partida, `gameTime` se congela y el HUD queda fijo en el valor que le quedaba, decisión explícita del usuario.
 
 No se identificaron riesgos relevantes que ameriten sección aparte (sin backend, sin datos sensibles; el cambio de mayor riesgo técnico —refactor a `balls[]`— queda acotado y descrito en el plan de implementación paso 5).
 

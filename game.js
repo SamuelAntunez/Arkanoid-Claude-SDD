@@ -40,6 +40,8 @@ class Game {
     this.blocks = createLevel();
     this.powerups = [];
     this.activeEffects = { size: null, speed: null };
+    this.gameTime = 0;
+    this.lastFrameAt = performance.now();
     this.score = 0;
     this.lives = 3;
   }
@@ -97,7 +99,7 @@ class Game {
   }
 
   applyPowerup( type ) {
-    const expiresAt = performance.now() + POWERUP_DURATION * 1000;
+    const expiresAt = this.gameTime + POWERUP_DURATION * 1000;
 
     if ( type === 'paddle-big' || type === 'paddle-small' ) {
       this.activeEffects.size = { type, expiresAt };
@@ -118,14 +120,12 @@ class Game {
   }
 
   updateActiveEffects() {
-    const now = performance.now();
-
-    if ( this.activeEffects.size && now > this.activeEffects.size.expiresAt ) {
+    if ( this.activeEffects.size && this.gameTime > this.activeEffects.size.expiresAt ) {
       this.paddle.setWidthScale( 1 );
       this.activeEffects.size = null;
     }
 
-    if ( this.activeEffects.speed && now > this.activeEffects.speed.expiresAt ) {
+    if ( this.activeEffects.speed && this.gameTime > this.activeEffects.speed.expiresAt ) {
       this.balls.forEach( ( ball ) => ball.setSpeed( this.ballBaseSpeed ) );
       this.activeEffects.speed = null;
     }
@@ -155,7 +155,13 @@ class Game {
   }
 
   update() {
+    const now = performance.now();
+    const delta = Math.min( now - this.lastFrameAt, 100 );
+    this.lastFrameAt = now;
+
     if ( this.state !== 'playing' ) return;
+
+    this.gameTime += delta;
 
     this.paddle.update();
     this.balls.forEach( ( ball ) => ball.update( this.paddle ) );
@@ -268,7 +274,6 @@ class Game {
   }
 
   renderActiveEffects() {
-    const now = performance.now();
     const active = [ this.activeEffects.size, this.activeEffects.speed ].filter( Boolean );
 
     ctx.font = '14px sans-serif';
@@ -276,7 +281,7 @@ class Game {
 
     active.forEach( ( effect, i ) => {
       const config = POWERUP_CONFIG[ effect.type ];
-      const secondsLeft = Math.ceil( ( effect.expiresAt - now ) / 1000 );
+      const secondsLeft = Math.max( 0, Math.ceil( ( effect.expiresAt - this.gameTime ) / 1000 ) );
       const y = 34 + i * 20;
 
       ctx.fillStyle = config.color;
