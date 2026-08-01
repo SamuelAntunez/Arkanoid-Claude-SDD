@@ -48,14 +48,6 @@ class Ball {
       bounceSound.play();
     }
 
-    // Temporal: rebote en el suelo, se corrige en el paso de vidas.
-    if ( this.y + this.radius > canvas.height ) {
-      this.y = canvas.height - this.radius;
-      this.dy = -this.dy;
-      bounceSound.currentTime = 0;
-      bounceSound.play();
-    }
-
     if (
       this.dy > 0 &&
       this.y + this.radius >= paddle.y &&

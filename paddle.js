@@ -31,6 +31,10 @@ class Paddle {
     this.clamp();
   }
 
+  resetPosition() {
+    this.x = ( canvas.width - this.width ) / 2;
+  }
+
   clamp() {
     if ( this.x < 0 ) this.x = 0;
     if ( this.x + this.width > canvas.width ) this.x = canvas.width - this.width;
