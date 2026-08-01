@@ -8,16 +8,19 @@ class Game {
   constructor() {
     this.state = 'playing';
     this.paddle = new Paddle();
+    this.ball = new Ball();
   }
 
   update() {
     this.paddle.update();
+    this.ball.update( this.paddle );
   }
 
   render() {
     ctx.fillStyle = '#000';
     ctx.fillRect( 0, 0, canvas.width, canvas.height );
     this.paddle.render();
+    this.ball.render();
   }
 
   loop() {
