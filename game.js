@@ -9,6 +9,14 @@ class Game {
     this.menu = new Menu();
     this.state = 'menu';
     canvas.addEventListener( 'click', ( e ) => this.onClick( e ) );
+    window.addEventListener( 'keydown', ( e ) => this.onKeyDown( e ) );
+  }
+
+  onKeyDown( e ) {
+    if ( e.key !== 'Escape' && e.key !== 'p' && e.key !== 'P' ) return;
+
+    if ( this.state === 'playing' ) this.state = 'paused';
+    else if ( this.state === 'paused' ) this.state = 'playing';
   }
 
   highScoreKey() {
@@ -103,8 +111,44 @@ class Game {
     this.blocks.forEach( ( block ) => block.render() );
     this.renderHud();
 
+    if ( this.state === 'paused' ) this.renderPauseOverlay();
     if ( this.state === 'gameover' ) this.renderEndScreen( 'Game Over' );
     if ( this.state === 'win' ) this.renderEndScreen( '¡Victoria!' );
+  }
+
+  pauseResumeButtonBounds() {
+    return { x: canvas.width / 2 - 220, y: 320, w: 200, h: 50 };
+  }
+
+  pauseMenuButtonBounds() {
+    return { x: canvas.width / 2 + 20, y: 320, w: 200, h: 50 };
+  }
+
+  renderPauseOverlay() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.fillRect( 0, 0, canvas.width, canvas.height );
+
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.font = '48px sans-serif';
+    ctx.fillText( 'Pausa', canvas.width / 2, 220 );
+
+    const resume = this.pauseResumeButtonBounds();
+    ctx.fillStyle = '#2a2';
+    ctx.fillRect( resume.x, resume.y, resume.w, resume.h );
+    ctx.fillStyle = '#fff';
+    ctx.font = '20px sans-serif';
+    ctx.textBaseline = 'middle';
+    ctx.fillText( 'Reanudar', resume.x + resume.w / 2, resume.y + resume.h / 2 );
+
+    const menuBtn = this.pauseMenuButtonBounds();
+    ctx.fillStyle = '#555';
+    ctx.fillRect( menuBtn.x, menuBtn.y, menuBtn.w, menuBtn.h );
+    ctx.fillStyle = '#fff';
+    ctx.fillText( 'Menú principal', menuBtn.x + menuBtn.w / 2, menuBtn.y + menuBtn.h / 2 );
+
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'left';
   }
 
   renderHud() {
