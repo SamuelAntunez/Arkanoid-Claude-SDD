@@ -42,7 +42,11 @@ class Game {
   }
 
   retryButtonBounds() {
-    return { x: canvas.width / 2 - 100, y: 380, w: 200, h: 50 };
+    return { x: canvas.width / 2 - 220, y: 380, w: 200, h: 50 };
+  }
+
+  endMenuButtonBounds() {
+    return { x: canvas.width / 2 + 20, y: 380, w: 200, h: 50 };
   }
 
   onClick( e ) {
@@ -71,9 +75,12 @@ class Game {
     }
 
     const btn = this.retryButtonBounds();
+    const menuBtn = this.endMenuButtonBounds();
 
     if ( mx >= btn.x && mx <= btn.x + btn.w && my >= btn.y && my <= btn.y + btn.h ) {
       this.startGame();
+    } else if ( mx >= menuBtn.x && mx <= menuBtn.x + menuBtn.w && my >= menuBtn.y && my <= menuBtn.y + menuBtn.h ) {
+      this.state = 'menu';
     }
   }
 
@@ -199,7 +206,14 @@ class Game {
     ctx.fillStyle = '#fff';
     ctx.font = '20px sans-serif';
     ctx.textBaseline = 'middle';
-    ctx.fillText( 'Reintentar', canvas.width / 2, btn.y + btn.h / 2 );
+    ctx.fillText( 'Reintentar', btn.x + btn.w / 2, btn.y + btn.h / 2 );
+
+    const menuBtn = this.endMenuButtonBounds();
+    ctx.fillStyle = '#555';
+    ctx.fillRect( menuBtn.x, menuBtn.y, menuBtn.w, menuBtn.h );
+    ctx.fillStyle = '#fff';
+    ctx.fillText( 'Menú principal', menuBtn.x + menuBtn.w / 2, menuBtn.y + menuBtn.h / 2 );
+
     ctx.textBaseline = 'top';
     ctx.textAlign = 'left';
   }
