@@ -1,6 +1,6 @@
 # Spec: Menú Principal, Pausa y Dificultad
 
-**Estado:** Approved
+**Estado:** Implementado
 **Depende de:** SPEC 01 (Arkanoid Core)
 **Fecha:** 2026-08-01
 
@@ -84,19 +84,19 @@ Nota: esto **rompe** la clave `arkanoid-highscore` de SPEC 01 — se migra a 3 c
 
 ## Criterios de aceptación
 
-- [ ] Al cargar `index.html` se muestra el Menú Principal, no el juego directamente.
-- [ ] El menú tiene un botón "Jugar" que inicia la partida.
-- [ ] El menú tiene 3 opciones de dificultad (Fácil/Normal/Difícil) y muestra cuál está seleccionada.
-- [ ] Elegir una dificultad distinta cambia la velocidad de la bola en la partida siguiente (Difícil > Normal > Fácil).
-- [ ] La dificultad elegida se guarda en `localStorage` bajo `arkanoid-difficulty` y se recuerda al recargar la página.
-- [ ] Cada dificultad tiene su propio high score, guardado en `arkanoid-highscore-easy`, `arkanoid-highscore-normal`, `arkanoid-highscore-hard`.
-- [ ] En pantalla se muestra el high score correspondiente a la dificultad de la partida actual.
-- [ ] Presionar `Esc` o `P` durante el juego pausa la partida: paddle y bola dejan de moverse.
-- [ ] Al pausar se muestra un overlay semitransparente con botones "Reanudar" y "Menú principal".
-- [ ] El botón "Reanudar" continúa la partida exactamente donde estaba (misma posición de bola/paddle, mismo score).
-- [ ] El botón "Menú principal" (desde pausa) resetea la partida en curso y vuelve al Menú Principal.
-- [ ] Las pantallas de Game Over y Victoria muestran, además de "Reintentar", un botón "Menú principal" que resetea y vuelve al menú.
-- [ ] Recargar la página después de una partida no pierde el high score de ninguna dificultad ya jugada.
+- [x] Al cargar `index.html` se muestra el Menú Principal, no el juego directamente.
+- [x] El menú tiene un botón "Jugar" que inicia la partida.
+- [x] El menú tiene 3 opciones de dificultad (Fácil/Normal/Difícil) y muestra cuál está seleccionada.
+- [x] Elegir una dificultad distinta cambia la velocidad de la bola en la partida siguiente (Difícil > Normal > Fácil).
+- [x] La dificultad elegida se guarda en `localStorage` bajo `arkanoid-difficulty` y se recuerda al recargar la página.
+- [x] Cada dificultad tiene su propio high score, guardado en `arkanoid-highscore-easy`, `arkanoid-highscore-normal`, `arkanoid-highscore-hard`.
+- [x] En pantalla se muestra el high score correspondiente a la dificultad de la partida actual.
+- [x] Presionar `Esc` o `P` durante el juego pausa la partida: paddle y bola dejan de moverse.
+- [x] Al pausar se muestra un overlay semitransparente con botones "Reanudar" y "Menú principal".
+- [x] El botón "Reanudar" continúa la partida exactamente donde estaba (misma posición de bola/paddle, mismo score).
+- [x] El botón "Menú principal" (desde pausa) resetea la partida en curso y vuelve al Menú Principal.
+- [x] Las pantallas de Game Over y Victoria muestran, además de "Reintentar", un botón "Menú principal" que resetea y vuelve al menú.
+- [x] Recargar la página después de una partida no pierde el high score de ninguna dificultad ya jugada.
 
 ---
 
