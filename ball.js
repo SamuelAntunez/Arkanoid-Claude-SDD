@@ -1,7 +1,7 @@
 class Ball {
-  constructor() {
+  constructor( speed = 6 ) {
     this.radius = SPRITES.ball.sw / 2;
-    this.speed = 6;
+    this.speed = speed;
     this.reset();
   }
 
