@@ -7,14 +7,17 @@ const breakSound = new Audio( 'assets/sounds/break-sound.mp3' );
 class Game {
   constructor() {
     this.state = 'playing';
+    this.paddle = new Paddle();
   }
 
   update() {
+    this.paddle.update();
   }
 
   render() {
     ctx.fillStyle = '#000';
     ctx.fillRect( 0, 0, canvas.width, canvas.height );
+    this.paddle.render();
   }
 
   loop() {
