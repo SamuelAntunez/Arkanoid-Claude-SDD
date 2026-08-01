@@ -9,11 +9,13 @@ class Game {
     this.state = 'playing';
     this.paddle = new Paddle();
     this.ball = new Ball();
+    this.blocks = createLevel();
   }
 
   update() {
     this.paddle.update();
     this.ball.update( this.paddle );
+    handleBlockCollisions( this.ball, this.blocks );
   }
 
   render() {
@@ -21,6 +23,7 @@ class Game {
     ctx.fillRect( 0, 0, canvas.width, canvas.height );
     this.paddle.render();
     this.ball.render();
+    this.blocks.forEach( ( block ) => block.render() );
   }
 
   loop() {
