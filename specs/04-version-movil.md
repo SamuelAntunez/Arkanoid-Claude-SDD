@@ -1,6 +1,6 @@
 # Spec: Versión móvil (touch + responsive)
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Depende de:** SPEC 01 (Arkanoid Core), SPEC 02 (Menú Principal, Pausa y Dificultad), SPEC 03 (Power-ups)
 **Fecha:** 2026-08-01
 
