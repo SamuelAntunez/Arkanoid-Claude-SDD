@@ -1,6 +1,6 @@
 # Spec: Arkanoid Core
 
-**Estado:** Draft
+**Estado:** Approved
 **Depende de:** Ninguna (primera spec del proyecto)
 **Fecha:** 2026-08-01
 
