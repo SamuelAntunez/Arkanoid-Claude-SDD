@@ -37,6 +37,7 @@ class Game {
     this.paddle = new Paddle();
     this.ball = new Ball( DIFFICULTY_SPEEDS[ this.difficulty ] );
     this.blocks = createLevel();
+    this.powerups = [];
     this.score = 0;
     this.lives = 3;
   }
@@ -105,7 +106,14 @@ class Game {
     this.blocks.forEach( ( block ) => block.update() );
 
     const hitBlock = handleBlockCollisions( this.ball, this.blocks );
-    if ( hitBlock ) this.score += 10;
+    if ( hitBlock ) {
+      this.score += 10;
+      const powerup = maybeSpawnPowerup( hitBlock );
+      if ( powerup ) this.powerups.push( powerup );
+    }
+
+    this.powerups.forEach( ( powerup ) => powerup.update() );
+    this.powerups = this.powerups.filter( ( powerup ) => powerup.y - powerup.radius <= canvas.height );
 
     if ( this.ball.y - this.ball.radius > canvas.height ) {
       this.loseLife();
@@ -128,6 +136,7 @@ class Game {
     this.paddle.render();
     this.ball.render();
     this.blocks.forEach( ( block ) => block.render() );
+    this.powerups.forEach( ( powerup ) => powerup.render() );
     this.renderHud();
 
     if ( this.state === 'paused' ) this.renderPauseOverlay();
