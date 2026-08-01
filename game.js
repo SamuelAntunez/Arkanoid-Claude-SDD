@@ -305,7 +305,7 @@ class Game {
     ctx.font = '18px sans-serif';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.fillText( `Score: ${ this.score }   High score: ${ this.highScore }`, 10, 10 );
+    ctx.fillText( `Score: ${ this.score }   High score: ${ this.highScore }   Nivel: ${ this.level + 1 }/${ LEVELS.length }`, 10, 10 );
 
     const ballSize = 16;
     const gap = 6;
