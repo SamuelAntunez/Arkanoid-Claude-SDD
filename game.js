@@ -4,10 +4,20 @@ const ctx = canvas.getContext( '2d' );
 const bounceSound = new Audio( 'assets/sounds/ball-bounce.mp3' );
 const breakSound = new Audio( 'assets/sounds/break-sound.mp3' );
 
+const HIGHSCORE_KEY = 'arkanoid-highscore';
+
 class Game {
   constructor() {
+    this.highScore = Number( localStorage.getItem( HIGHSCORE_KEY ) ) || 0;
     this.initState();
     canvas.addEventListener( 'click', ( e ) => this.onClick( e ) );
+  }
+
+  updateHighScore() {
+    if ( this.score > this.highScore ) {
+      this.highScore = this.score;
+      localStorage.setItem( HIGHSCORE_KEY, String( this.highScore ) );
+    }
   }
 
   initState() {
@@ -41,6 +51,7 @@ class Game {
 
     if ( this.lives <= 0 ) {
       this.state = 'gameover';
+      this.updateHighScore();
       return;
     }
 
@@ -64,6 +75,7 @@ class Game {
 
     if ( this.state === 'playing' && this.blocks.every( ( block ) => block.broken ) ) {
       this.state = 'win';
+      this.updateHighScore();
     }
   }
 
@@ -85,7 +97,8 @@ class Game {
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     ctx.fillText( `Score: ${ this.score }`, 10, 10 );
-    ctx.fillText( `Vidas: ${ this.lives }`, 10, 32 );
+    ctx.fillText( `High score: ${ this.highScore }`, 10, 32 );
+    ctx.fillText( `Vidas: ${ this.lives }`, 10, 54 );
   }
 
   renderEndScreen( title ) {
