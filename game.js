@@ -96,9 +96,17 @@ class Game {
     ctx.font = '18px sans-serif';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.fillText( `Score: ${ this.score }`, 10, 10 );
-    ctx.fillText( `High score: ${ this.highScore }`, 10, 32 );
-    ctx.fillText( `Vidas: ${ this.lives }`, 10, 54 );
+    ctx.fillText( `Score: ${ this.score }   High score: ${ this.highScore }`, 10, 10 );
+
+    const ballSize = 16;
+    const gap = 6;
+    const totalWidth = this.lives * ballSize + Math.max( 0, this.lives - 1 ) * gap;
+    let livesX = canvas.width - 10 - totalWidth;
+
+    for ( let i = 0; i < this.lives; i++ ) {
+      drawSprite( ctx, 'ball', livesX, 10, ballSize, ballSize );
+      livesX += ballSize + gap;
+    }
   }
 
   renderEndScreen( title ) {
