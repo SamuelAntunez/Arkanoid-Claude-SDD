@@ -1,0 +1,3 @@
+# Juego de Arkanoid
+
+El objetivo es que construyamos un juego de Arkanoid, con HTML, CSS y Javascript, cero dependencias y las personas van a poder jugar el juego. Esto todavia no esta implementado
