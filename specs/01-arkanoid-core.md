@@ -93,20 +93,20 @@ class Game {
 
 ## Criterios de aceptación
 
-- [ ] Canvas 800x600 se renderiza con paddle, bola y bloques usando sprites de `assets/spritesheet-breakout.png`.
-- [ ] Paddle se mueve con teclado (flechas o A/D) y con mouse, sin salir de los límites del canvas.
-- [ ] Bola rebota en paredes izquierda, derecha y superior.
-- [ ] Bola rebota en el paddle con ángulo distinto según el punto de contacto (golpe en el borde ≠ golpe al centro).
-- [ ] Bola rebota en bloques y el bloque impactado queda marcado como roto.
-- [ ] Al romper un bloque se reproduce la animación de `EXPLOSION_FRAMES` del color correspondiente antes de que el bloque desaparezca.
-- [ ] Se reproduce `ball-bounce.mp3` en cada rebote (pared, paddle, bloque).
-- [ ] Se reproduce `break-sound.mp3` al romper un bloque.
-- [ ] El score aumenta al romper cada bloque y se muestra en pantalla en todo momento.
-- [ ] Perder una vida (bola cae debajo del paddle) resetea posición de bola y paddle, y descuenta una vida.
-- [ ] Al llegar a 0 vidas se muestra pantalla de Game Over con botón de reintentar, y el loop de juego se detiene.
-- [ ] Al romper todos los bloques se muestra pantalla de Victoria con botón de reintentar, y el loop de juego se detiene.
-- [ ] El botón de reintentar (en ambas pantallas) reinicia vidas, score, paddle, bola y bloques al estado inicial.
-- [ ] Al finalizar una partida (Game Over o Victoria), si `score` supera el valor guardado en `arkanoid-highscore` de localStorage, se actualiza; el high score se muestra en pantalla en todo momento.
+- [x] Canvas 800x600 se renderiza con paddle, bola y bloques usando sprites de `assets/spritesheet-breakout.png`.
+- [x] Paddle se mueve con teclado (flechas o A/D) y con mouse, sin salir de los límites del canvas.
+- [x] Bola rebota en paredes izquierda, derecha y superior.
+- [x] Bola rebota en el paddle con ángulo distinto según el punto de contacto (golpe en el borde ≠ golpe al centro).
+- [x] Bola rebota en bloques y el bloque impactado queda marcado como roto.
+- [x] Al romper un bloque se reproduce la animación de `EXPLOSION_FRAMES` del color correspondiente antes de que el bloque desaparezca.
+- [x] Se reproduce `ball-bounce.mp3` en cada rebote (pared, paddle, bloque).
+- [x] Se reproduce `break-sound.mp3` al romper un bloque.
+- [x] El score aumenta al romper cada bloque y se muestra en pantalla en todo momento.
+- [x] Perder una vida (bola cae debajo del paddle) resetea posición de bola y paddle, y descuenta una vida.
+- [x] Al llegar a 0 vidas se muestra pantalla de Game Over con botón de reintentar, y el loop de juego se detiene.
+- [x] Al romper todos los bloques se muestra pantalla de Victoria con botón de reintentar, y el loop de juego se detiene.
+- [x] El botón de reintentar (en ambas pantallas) reinicia vidas, score, paddle, bola y bloques al estado inicial.
+- [x] Al finalizar una partida (Game Over o Victoria), si `score` supera el valor guardado en `arkanoid-highscore` de localStorage, se actualiza; el high score se muestra en pantalla en todo momento.
 
 ---
 
