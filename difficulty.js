@@ -1,3 +1,5 @@
+const DIFFICULTY_KEY = 'arkanoid-difficulty';
+
 const DIFFICULTIES = [ 'easy', 'normal', 'hard' ];
 
 const DIFFICULTY_LABELS = {

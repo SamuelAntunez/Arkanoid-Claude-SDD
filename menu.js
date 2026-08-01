@@ -1,6 +1,6 @@
 class Menu {
   constructor() {
-    this.selectedDifficulty = 'normal';
+    this.selectedDifficulty = localStorage.getItem( DIFFICULTY_KEY ) || 'normal';
   }
 
   playButtonBounds() {
@@ -21,6 +21,7 @@ class Menu {
       const btn = this.difficultyButtonBounds( i );
       if ( mx >= btn.x && mx <= btn.x + btn.w && my >= btn.y && my <= btn.y + btn.h ) {
         this.selectedDifficulty = DIFFICULTIES[ i ];
+        localStorage.setItem( DIFFICULTY_KEY, this.selectedDifficulty );
         return null;
       }
     }
