@@ -37,7 +37,8 @@ class Game {
     this.paddle = new Paddle();
     this.ballBaseSpeed = DIFFICULTY_SPEEDS[ this.difficulty ];
     this.balls = [ new Ball( this.ballBaseSpeed ) ];
-    this.blocks = createLevel();
+    this.level = 0;
+    this.blocks = createLevel( this.level );
     this.powerups = [];
     this.activeEffects = { size: null, speed: null };
     this.gameTime = 0;
@@ -56,6 +57,14 @@ class Game {
 
   menuButtonBounds() {
     return { x: canvas.width - 10 - 44, y: 10, w: 44, h: 44 };
+  }
+
+  nextLevelButtonBounds() {
+    return { x: canvas.width / 2 - 220, y: 380, w: 200, h: 50 };
+  }
+
+  levelCompleteMenuButtonBounds() {
+    return { x: canvas.width / 2 + 20, y: 380, w: 200, h: 50 };
   }
 
   onClick( e ) {
@@ -84,6 +93,18 @@ class Game {
 
       if ( mx >= resume.x && mx <= resume.x + resume.w && my >= resume.y && my <= resume.y + resume.h ) {
         this.state = 'playing';
+      } else if ( mx >= menuBtn.x && mx <= menuBtn.x + menuBtn.w && my >= menuBtn.y && my <= menuBtn.y + menuBtn.h ) {
+        this.state = 'menu';
+      }
+      return;
+    }
+
+    if ( this.state === 'levelcomplete' ) {
+      const next = this.nextLevelButtonBounds();
+      const menuBtn = this.levelCompleteMenuButtonBounds();
+
+      if ( mx >= next.x && mx <= next.x + next.w && my >= next.y && my <= next.y + next.h ) {
+        this.advanceToNextLevel();
       } else if ( mx >= menuBtn.x && mx <= menuBtn.x + menuBtn.w && my >= menuBtn.y && my <= menuBtn.y + menuBtn.h ) {
         this.state = 'menu';
       }
@@ -140,6 +161,16 @@ class Game {
       this.balls.forEach( ( ball ) => ball.setSpeed( this.ballBaseSpeed ) );
       this.activeEffects.speed = null;
     }
+  }
+
+  advanceToNextLevel() {
+    this.level += 1;
+    this.blocks = createLevel( this.level );
+    this.activeEffects = { size: null, speed: null };
+    this.paddle.setWidthScale( 1 );
+    this.paddle.resetPosition();
+    this.respawnBall();
+    this.state = 'playing';
   }
 
   respawnBall() {
@@ -205,8 +236,12 @@ class Game {
     }
 
     if ( this.state === 'playing' && this.blocks.every( ( block ) => block.broken ) ) {
-      this.state = 'win';
-      this.updateHighScore();
+      if ( this.level < LEVELS.length - 1 ) {
+        this.state = 'levelcomplete';
+      } else {
+        this.state = 'win';
+        this.updateHighScore();
+      }
     }
   }
 
@@ -225,6 +260,7 @@ class Game {
     this.renderHud();
 
     if ( this.state === 'paused' ) this.renderPauseOverlay();
+    if ( this.state === 'levelcomplete' ) this.renderLevelCompleteScreen();
     if ( this.state === 'gameover' ) this.renderEndScreen( 'Game Over' );
     if ( this.state === 'win' ) this.renderEndScreen( '¡Victoria!' );
   }
@@ -269,7 +305,7 @@ class Game {
     ctx.font = '18px sans-serif';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.fillText( `Score: ${ this.score }   High score: ${ this.highScore }`, 10, 10 );
+    ctx.fillText( `Score: ${ this.score }   High score: ${ this.highScore }   Nivel: ${ this.level + 1 }/${ LEVELS.length }`, 10, 10 );
 
     const ballSize = 16;
     const gap = 6;
@@ -321,6 +357,36 @@ class Game {
       ctx.textBaseline = 'top';
       ctx.fillText( `${ secondsLeft }s`, 32, y );
     } );
+  }
+
+  renderLevelCompleteScreen() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.fillRect( 0, 0, canvas.width, canvas.height );
+
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.font = '48px sans-serif';
+    ctx.fillText( '¡Nivel completado!', canvas.width / 2, 250 );
+
+    ctx.font = '24px sans-serif';
+    ctx.fillText( `Score: ${ this.score }`, canvas.width / 2, 320 );
+
+    const next = this.nextLevelButtonBounds();
+    ctx.fillStyle = '#2a2';
+    ctx.fillRect( next.x, next.y, next.w, next.h );
+    ctx.fillStyle = '#fff';
+    ctx.font = '20px sans-serif';
+    ctx.textBaseline = 'middle';
+    ctx.fillText( 'Siguiente nivel', next.x + next.w / 2, next.y + next.h / 2 );
+
+    const menuBtn = this.levelCompleteMenuButtonBounds();
+    ctx.fillStyle = '#555';
+    ctx.fillRect( menuBtn.x, menuBtn.y, menuBtn.w, menuBtn.h );
+    ctx.fillStyle = '#fff';
+    ctx.fillText( 'Menú principal', menuBtn.x + menuBtn.w / 2, menuBtn.y + menuBtn.h / 2 );
+
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'left';
   }
 
   renderEndScreen( title ) {
