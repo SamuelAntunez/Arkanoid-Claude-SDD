@@ -61,6 +61,10 @@ class Game {
     if ( this.ball.y - this.ball.radius > canvas.height ) {
       this.loseLife();
     }
+
+    if ( this.state === 'playing' && this.blocks.every( ( block ) => block.broken ) ) {
+      this.state = 'win';
+    }
   }
 
   render() {
@@ -72,6 +76,7 @@ class Game {
     this.renderHud();
 
     if ( this.state === 'gameover' ) this.renderEndScreen( 'Game Over' );
+    if ( this.state === 'win' ) this.renderEndScreen( '¡Victoria!' );
   }
 
   renderHud() {
